@@ -11,9 +11,10 @@ var requiredEnvVars = []string{
 	"JWT_SECRET",
 	"MONGO_URI",
 	"PORT",
+	"ENV",
 }
 
-func LoadEnv() {
+func loadEnv() {
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")

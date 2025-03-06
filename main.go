@@ -3,15 +3,16 @@ package main
 import (
 	"context"
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 	"os"
 
 	"github.com/ckwcfm/learn-go/rss/db"
+	"github.com/ckwcfm/learn-go/rss/middlewares"
 	"github.com/ckwcfm/learn-go/rss/routes"
 
 	"github.com/go-chi/chi"
-	"github.com/go-chi/cors"
 )
 
 func main() {
@@ -22,7 +23,7 @@ func main() {
 		}
 	}()
 
-	LoadEnv()
+	loadEnv()
 
 	port := os.Getenv("PORT")
 	fmt.Println(port)
@@ -34,19 +35,28 @@ func main() {
 
 	router := chi.NewRouter()
 
-	router.Use(cors.Handler(cors.Options{
-		AllowedOrigins:   []string{"https://*", "http://*"},
-		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
-		AllowCredentials: false,
-		MaxAge:           300,
-	}))
+	router.Use(middlewares.CORSMiddleware)
+	router.Use(middlewares.Logger)
 
-	v1Router := chi.NewRouter()
-	v1Router.Get("/healthz", handlerReadiness)
-	v1Router.Get("/error", handlerError)
-	v1Router.Mount("/users", routes.UserRouter)
-	router.Mount("/v1", v1Router)
+	router.Mount("/v1", routes.V1Router)
+
+	h1 := func(w http.ResponseWriter, r *http.Request) {
+		type PageData struct {
+			Title   string
+			Message string
+		}
+		pageData := []PageData{
+			{Title: "Hello World", Message: "Welcome to the API"},
+			{Title: "Hello World2", Message: "Welcome to the API2"},
+		}
+		data := map[string][]PageData{
+			"data": pageData,
+		}
+		tmpl := template.Must(template.ParseFiles("index.html"))
+		tmpl.Execute(w, data)
+	}
+
+	router.Get("/", h1)
 
 	srv := &http.Server{
 		Handler: router,
