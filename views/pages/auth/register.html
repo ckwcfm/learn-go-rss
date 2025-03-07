@@ -1,0 +1,38 @@
+{{ define "content" }}
+<div class="flex flex-col items-center justify-center h-screen w-screen">
+  <h1>Register</h1>
+
+  <form
+    class="flex flex-col gap-4 bg-gray-100 p-4 rounded-md"
+    hx-post="/register"
+    hx-target="#error"
+    hx-swap="outerHTML"
+  >
+    <div>
+      <label for="email">Email</label>
+      <input
+        class="w-full p-2 rounded-md"
+        type="text"
+        name="email"
+        placeholder="Email"
+        value="{{ .Email }}"
+      />
+    </div>
+    <div>
+      <label for="password">Password</label>
+      <input
+        class="w-full p-2 rounded-md"
+        type="password"
+        name="password"
+        placeholder="Password"
+        value="{{ .Password }}"
+      />
+    </div>
+
+    <button class="bg-blue-500 text-white p-2 rounded-md" type="submit">
+      Register
+    </button>
+  </form>
+  <div id="error" class="text-red-500"></div>
+</div>
+{{ end }}

@@ -6,12 +6,9 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/ckwcfm/learn-go/rss/constants"
 	"github.com/ckwcfm/learn-go/rss/services"
 )
-
-type contextKey string
-
-const userIDKey contextKey = "userID"
 
 func Authorization(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -32,7 +29,7 @@ func Authorization(next http.Handler) http.Handler {
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
 		}
-		ctx := context.WithValue(r.Context(), userIDKey, userID)
+		ctx := context.WithValue(r.Context(), constants.UserIDKey, userID)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }

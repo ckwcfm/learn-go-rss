@@ -11,7 +11,9 @@ import (
 	"github.com/ckwcfm/learn-go/rss/models"
 	"github.com/golang-jwt/jwt/v5"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -26,7 +28,8 @@ func getUserCollection() *mongo.Collection {
 func CreateUser(user models.User) error {
 	userCollection := getUserCollection()
 	user.Password = hashPassword(user.Password)
-
+	user.CreatedAt = time.Now()
+	user.UpdatedAt = time.Now()
 	_, err := userCollection.InsertOne(context.Background(), user)
 	return err
 }
@@ -96,4 +99,17 @@ func Login(email, password string) (string, error) {
 		return "", err
 	}
 	return token, nil
+}
+
+func GetUserByID(userID string) (models.User, error) {
+	log.Println("Getting user by ID", userID)
+	var user models.User
+	objectID, err := primitive.ObjectIDFromHex(userID)
+	if err != nil {
+		return models.User{}, err
+	}
+	opts := options.FindOne().SetProjection(bson.M{"password": 0})
+	err = getUserCollection().FindOne(context.Background(), bson.M{"_id": objectID}, opts).Decode(&user)
+	log.Println("User", user)
+	return user, err
 }

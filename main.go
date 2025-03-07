@@ -37,7 +37,7 @@ func main() {
 	router.Use(middlewares.CORSMiddleware)
 	router.Use(middlewares.Logger)
 
-	router.Mount("/v1", routes.V1Router)
+	router.Mount("/api", routes.APIRouter)
 	router.Mount("/", routes.PageRouter)
 
 	srv := &http.Server{

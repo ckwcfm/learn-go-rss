@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/ckwcfm/learn-go/rss/services"
+	"github.com/ckwcfm/learn-go/rss/utils"
 )
 
 func Login(w http.ResponseWriter, r *http.Request) {
@@ -31,7 +32,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println("LoginHandler")
 	err := r.ParseForm()
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		renderError(w, "Missing form data")
 		return
 	}
 	email := r.FormValue("email")
@@ -42,19 +43,21 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	token, err := services.Login(email, password)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		renderError(w, "Invalid email or password")
 		return
 	}
 
-	cookie := &http.Cookie{
-		Name:     "Authorization",
-		Value:    "Bearer " + token,
-		Path:     "/",
-		MaxAge:   3600,
-		Secure:   os.Getenv("ENV") == "production",
-		HttpOnly: true,
-		SameSite: http.SameSiteLaxMode,
-	}
-	http.SetCookie(w, cookie)
+	// set the cookie
+	http.SetCookie(w, utils.CreateTokenCookie(token))
+	// redirect to the about page
 	w.Header().Add("HX-Redirect", "/about")
+}
+
+func renderError(w http.ResponseWriter, error string) {
+	tmpl := template.Must(template.ParseFiles("views/pages/auth/login.html"))
+	tmpl.ExecuteTemplate(w, "error", struct {
+		Error string
+	}{
+		Error: error,
+	})
 }

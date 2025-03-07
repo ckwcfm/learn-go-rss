@@ -14,4 +14,6 @@ func init() {
 	PageRouter.With(middlewares.Authorization).Get("/about", pages.About)
 	PageRouter.Get("/login", auth.Login)
 	PageRouter.Post("/login", auth.LoginHandler)
+	PageRouter.Get("/register", auth.Register)
+	PageRouter.Post("/register", auth.RegisterHandler)
 }
