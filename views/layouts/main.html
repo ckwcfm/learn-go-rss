@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RSS Feed</title>
+    <script defer src="https://unpkg.com/htmx.org@2.0.4"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100">
+    <div class="flex h-screen w-screen mx-auto">
+      {{ block "sidebar" . }} {{end}}
+      <div class="flex-1 bg-white h-screen w-full" id="main">
+        {{ block "content" . }} {{end}}
+      </div>
+    </div>
+  </body>
+</html>

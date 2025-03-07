@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"html/template"
 	"log"
 	"net/http"
 	"os"
@@ -39,24 +38,7 @@ func main() {
 	router.Use(middlewares.Logger)
 
 	router.Mount("/v1", routes.V1Router)
-
-	h1 := func(w http.ResponseWriter, r *http.Request) {
-		type PageData struct {
-			Title   string
-			Message string
-		}
-		pageData := []PageData{
-			{Title: "Hello World", Message: "Welcome to the API"},
-			{Title: "Hello World2", Message: "Welcome to the API2"},
-		}
-		data := map[string][]PageData{
-			"data": pageData,
-		}
-		tmpl := template.Must(template.ParseFiles("index.html"))
-		tmpl.Execute(w, data)
-	}
-
-	router.Get("/", h1)
+	router.Mount("/", routes.PageRouter)
 
 	srv := &http.Server{
 		Handler: router,

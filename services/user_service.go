@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"errors"
 	"log"
 	"os"
 	"time"
@@ -64,4 +65,35 @@ func CreateToken(userID string) (string, error) {
 		"exp":     time.Now().Add(time.Hour * 24).Unix(), // 24 hour expiration
 	})
 	return token.SignedString([]byte(jwtSecret))
+}
+
+func ValidateToken(token string) (string, error) {
+	jwtSecret := os.Getenv("JWT_SECRET")
+	type CustomClaims struct {
+		UserID string `json:"user_id"`
+		jwt.RegisteredClaims
+	}
+	parsedToken, err := jwt.ParseWithClaims(token, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte(jwtSecret), nil
+	})
+	if err != nil {
+		return "", err
+	}
+	claims, ok := parsedToken.Claims.(*CustomClaims)
+	if !ok || !parsedToken.Valid {
+		return "", errors.New("invalid token")
+	}
+	return claims.UserID, nil
+}
+
+func Login(email, password string) (string, error) {
+	user, err := ValidateUser(email, password)
+	if err != nil {
+		return "", err
+	}
+	token, err := CreateToken(user.ID)
+	if err != nil {
+		return "", err
+	}
+	return token, nil
 }
