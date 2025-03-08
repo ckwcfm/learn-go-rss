@@ -1,7 +1,16 @@
 {{ define "content" }}
-<div class="flex flex-col items-center justify-center h-screen w-screen">
-  <h1>Register</h1>
+  <div class="flex flex-col items-center justify-center h-screen w-screen">
+    <h1>Register</h1>
 
+    <div id="error" class="text-red-500"></div>
+    <!-- form -->
+    {{ block "form" . }}{{ end }}
+    <!-- error -->
+    {{ block "error" . }}{{ end }}
+  </div>
+{{ end }}
+
+{{ define "form" }}
   <form
     class="flex flex-col gap-4 bg-gray-100 p-4 rounded-md"
     hx-post="/register"
@@ -33,6 +42,8 @@
       Register
     </button>
   </form>
+{{ end }}
+
+{{ define "error" }}
   <div id="error" class="text-red-500"></div>
-</div>
 {{ end }}

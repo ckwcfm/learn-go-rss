@@ -94,6 +94,7 @@ func Login(email, password string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
 	token, err := CreateToken(user.ID)
 	if err != nil {
 		return "", err

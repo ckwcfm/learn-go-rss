@@ -1,56 +1,59 @@
 {{ define "content" }}
-<div class="w-full h-full flex flex-col gap-4 items-center justify-center">
-  <div class="flex flex-col gap-2 items-center">
-    <h1 class="text-2xl font-bold">Learn Go</h1>
-    <p class="text-sm text-gray-500">
-      Learn Go is a website that teaches you how to code in Go.
-    </p>
+  <div class="w-full h-full flex flex-col gap-4 items-center justify-center">
+    <div class="flex flex-col gap-2 items-center">
+      <h1 class="text-2xl font-bold">Learn Go</h1>
+      <p class="text-sm text-gray-500">
+        Learn Go is a website that teaches you how to code in Go.
+      </p>
+    </div>
+    <h1 class="text-2xl font-bold">Login</h1>
+    {{ block "form" . }}{{ end }}
+    <!-- error -->
+    {{ block "error" . }}{{ end }}
   </div>
-  <h1 class="text-2xl font-bold">Login</h1>
-  {{ template "form" . }} {{ template "error" . }}
-</div>
 {{ end }}
+
 
 <!-- form -->
 {{ define "form" }}
-
-<form
-  class="flex flex-col gap-6 bg-gray-100 p-4 rounded-md"
-  hx-post="/login"
-  hx-target="#error"
-  hx-swap="outerHTML"
->
-  <div>
-    <label for="email">Email</label>
-    <input
-      class="w-full p-4 rounded-md"
-      type="text"
-      name="email"
-      placeholder="Email"
-      value="{{ .Email }}"
-    />
-  </div>
-  <div>
-    <label for="password">Password</label>
-    <input
-      class="w-full p-4 rounded-md"
-      type="password"
-      name="password"
-      placeholder="Password"
-      value="{{ .Password }}"
-    />
-  </div>
-
-  <button
-    class="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition-colors"
-    type="submit"
+  <form
+    class="flex flex-col gap-6 bg-gray-100 p-4 rounded-md"
+    hx-post="/login"
+    hx-target="#error"
+    hx-swap="outerHTML"
   >
-    Login
-  </button>
-</form>
+    <div>
+      <label for="email">Email</label>
+      <input
+        class="w-full p-4 rounded-md"
+        type="text"
+        name="email"
+        placeholder="Email"
+        value="{{ .Email }}"
+      />
+    </div>
+    <div>
+      <label for="password">Password</label>
+      <input
+        class="w-full p-4 rounded-md"
+        type="password"
+        name="password"
+        placeholder="Password"
+        value="{{ .Password }}"
+      />
+    </div>
+
+    <button
+      class="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition-colors"
+      type="submit"
+    >
+      Login
+    </button>
+  </form>
 {{ end }}
+
 
 <!-- error -->
 {{ define "error" }}
-<div id="error" class="text-red-500">{{ .Error }}</div>
+  <div id="error" class="text-red-500">{{ .Error }}</div>
 {{ end }}

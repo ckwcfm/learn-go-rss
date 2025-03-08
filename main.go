@@ -39,6 +39,7 @@ func main() {
 
 	router.Mount("/api", routes.APIRouter)
 	router.Mount("/", routes.PageRouter)
+	router.Mount("/actions", routes.ActionRouter)
 
 	srv := &http.Server{
 		Handler: router,

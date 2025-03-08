@@ -1,0 +1,47 @@
+{{ define "dialog" }}
+  <dialog id="dialog" open method="dialog">
+    <div
+      hx-boost="true"
+      hx-trigger="click"
+      hx-target="#dialog"
+      hx-swap="innerHTML"
+      class="fixed top-0 left-0 w-full h-full bg-black/50"
+    >
+      <div class="w-full h-full flex flex-col items-center justify-center">
+        <div
+          class="flex flex-col gap-2 items-center justify-center p-4 rounded-md bg-white"
+        >
+          {{ block "dialogHeader" . }}{{ end }}
+          <div class="w-full border-t border-gray-200" />
+          {{ block "dialogBody" . }}{{ end }}
+        </div>
+      </div>
+    </div>
+  </dialog>
+{{ end }}
+
+{{ define "dialogHeader" }}
+  {{ $title := .Header.Title }}
+  {{ $description :=
+    .Header.Description
+  }}
+  <div class="flex flex-col w-full">
+    <h1 class="text-2xl font-bold">{{ $title }}</h1>
+    <p class="text-sm">{{ $description }}</p>
+  </div>
+{{ end }}
+
+{{ define "dialogFooter" }}
+  {{ $closeButton := .Footer.CloseButton }}
+  {{ $submitButton := .Footer.SubmitButton }}
+  <div class="flex gap-2">
+    <form method="dialog">
+      <button class="text-sm bg-red-500 text-white p-2 rounded-md">
+        {{ $closeButton }}
+      </button>
+    </form>
+    <button class="text-sm bg-green-500 text-white p-2 rounded-md">
+      {{ $submitButton }}
+    </button>
+  </div>
+{{ end }}

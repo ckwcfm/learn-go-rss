@@ -1,0 +1,13 @@
+{{ define "content" }}
+  <div class="flex flex-col items-center justify-center h-full">
+    <h1 class="text-2xl font-bold">Unauthorized</h1>
+    <p class="text-sm">You are not authorized to access this page</p>
+    <p class="text-sm">Please login to continue</p>
+    <div
+      class="flex gap-2 items-center justify-center bg-blue-500 text-white rounded-md p-2 px-4 mt-4"
+    >
+      <span class="material-symbols-outlined"> arrow_back </span>
+      <a href="/login" class="text-sm">Login</a>
+    </div>
+  </div>
+{{ end }}

@@ -29,12 +29,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 }
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println("LoginHandler")
-	err := r.ParseForm()
-	if err != nil {
-		renderError(w, "Missing form data")
-		return
-	}
+	log.Println("Page LoginHandler")
 	email := r.FormValue("email")
 	password := r.FormValue("password")
 

@@ -1,10 +1,33 @@
 {{ define "sidebar" }}
-<div class="w-1/4 bg-gray-100">
-  <div>
-    <a href="/">Home</a>
+  <div class="w-1/4 bg-gray-100">
+    <div id="sidenav" class="flex flex-col gap-1 p-2">
+      <h1 class="text-2xl font-bold py-2 pr-2">Learn-Go</h1>
+      <a
+        class="text-sm hover:bg-gray-200 hover:text-gray-900 p-1 px-2 rounded-md"
+        href="/"
+        >Home</a
+      >
+      <a
+        class="text-sm hover:bg-gray-200 hover:text-gray-900 p-1 px-2 rounded-md"
+        href="/about"
+        >About</a
+      >
+    </div>
+    <script>
+      $(document).ready(function () {
+        // get the current path
+        const currentPath = window.location.pathname;
+        // get the sidenav
+        const sidenav = $("#sidenav");
+        // get the links in the sidenav
+        const links = sidenav.find("a");
+        // add the active class to the link that matches the current path
+        links.each(function () {
+          if ($(this).attr("href") === currentPath) {
+            $(this).addClass("bg-gray-700 text-white");
+          }
+        });
+      });
+    </script>
   </div>
-  <div>
-    <a href="/about">About</a>
-  </div>
-</div>
 {{ end }}

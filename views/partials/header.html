@@ -1,0 +1,15 @@
+{{ define "header" }}
+  <!doctype html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      {{ block "headerTitle" . }}
+        <title>Learn-Go</title>
+      {{ end }}
+      <script defer src="https://unpkg.com/htmx.org@2.0.4"></script>
+      <script src="https://cdn.tailwindcss.com"></script>
+      <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    </head>
+  </html>
+{{ end }}

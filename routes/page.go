@@ -16,4 +16,5 @@ func init() {
 	PageRouter.Post("/login", auth.LoginHandler)
 	PageRouter.Get("/register", auth.Register)
 	PageRouter.Post("/register", auth.RegisterHandler)
+	PageRouter.Post("/logout", auth.Logout)
 }

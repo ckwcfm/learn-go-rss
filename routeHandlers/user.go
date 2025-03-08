@@ -15,9 +15,12 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 
 	// TODO: need to find a way to support json and form data
 	var user models.User
-	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
+	email := r.FormValue("email")
+	password := r.FormValue("password")
+
+	user = models.User{
+		Email:    email,
+		Password: password,
 	}
 
 	validate := validator.New()
@@ -38,13 +41,10 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 
 func LoginUser(w http.ResponseWriter, r *http.Request) {
 	log.Println("LoginUser")
-	err := r.ParseForm()
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
 	email := r.FormValue("email")
 	password := r.FormValue("password")
+	log.Println("Email:", email)
+	log.Println("Password:", password)
 	user := models.User{
 		Email:    email,
 		Password: password,
@@ -56,7 +56,7 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err = services.ValidateUser(user.Email, user.Password)
+	user, err := services.ValidateUser(user.Email, user.Password)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

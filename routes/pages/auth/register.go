@@ -43,3 +43,8 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, utils.CreateTokenCookie(token))
 	http.Redirect(w, r, "/login", http.StatusSeeOther)
 }
+
+func Logout(w http.ResponseWriter, r *http.Request) {
+	http.SetCookie(w, utils.CreateTokenCookie(""))
+	http.Redirect(w, r, "/login", http.StatusSeeOther)
+}

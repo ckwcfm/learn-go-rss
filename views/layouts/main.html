@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -6,13 +6,22 @@
     <title>RSS Feed</title>
     <script defer src="https://unpkg.com/htmx.org@2.0.4"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
   </head>
-  <body class="bg-gray-100">
+  <body class="relative bg-gray-100">
     <div class="flex h-screen w-screen mx-auto">
-      {{ block "sidebar" . }} {{end}}
+      {{ block "sidebar" . }}{{ end }}
       <div class="flex-1 bg-white h-screen w-full" id="main">
-        {{ block "content" . }} {{end}}
+        {{ block "content" . }}{{ end }}
       </div>
     </div>
+
+    {{ block "dialog" . }}
+      <div id="dialog" />
+    {{ end }}
   </body>
 </html>
