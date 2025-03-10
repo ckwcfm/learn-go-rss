@@ -38,8 +38,8 @@ func main() {
 	router.Use(middlewares.Logger)
 
 	router.Mount("/api", routes.APIRouter)
-	router.Mount("/", routes.PageRouter)
 	router.Mount("/actions", routes.ActionRouter)
+	router.Mount("/", routes.PageRouter)
 
 	srv := &http.Server{
 		Handler: router,

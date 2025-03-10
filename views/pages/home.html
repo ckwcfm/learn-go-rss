@@ -1,14 +1,15 @@
 {{ define "content" }}
-<div class="w-full h-full flex flex-col items-center justify-center">
-  <h1>Home</h1>
-  <p>Welcome to the home page</p>
-  <button
-    class="bg-blue-500 text-white p-2 rounded-md"
-    hx-get="/actions/dialogs/homeDialog"
-    hx-target="#dialog"
-    hx-swap="outerHTML"
-  >
-    Open Dialog
-  </button>
-</div>
+  <div class="w-full h-full flex flex-col items-center justify-center">
+    <h1>Home</h1>
+    <p>Welcome to the home page</p>
+    <p>hello Alvin and Alex</p>
+    <button
+      class="bg-blue-500 text-white p-2 rounded-md"
+      hx-get="/actions/dialogs/homeDialog"
+      hx-target="#dialog"
+      hx-swap="outerHTML"
+    >
+      Open Dialog
+    </button>
+  </div>
 {{ end }}
