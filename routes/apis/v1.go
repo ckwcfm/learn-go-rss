@@ -7,7 +7,7 @@ import (
 var V1Router = chi.NewRouter()
 
 func init() {
-	V1Router.Mount("/users", UserRouter)
-	V1Router.Get("/healthz", handlerReadiness)
-	V1Router.Get("/error", handlerError)
+	// V1Router.Mount("/users", UserRouter)
+	// V1Router.Get("/healthz", handlerReadiness)
+	// V1Router.Get("/error", handlerError)
 }

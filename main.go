@@ -8,10 +8,7 @@ import (
 	"os"
 
 	"github.com/ckwcfm/learn-go/rss/db"
-	"github.com/ckwcfm/learn-go/rss/middlewares"
 	"github.com/ckwcfm/learn-go/rss/routes"
-
-	"github.com/go-chi/chi"
 )
 
 func main() {
@@ -32,20 +29,29 @@ func main() {
 		log.Fatal(err)
 	}
 
-	router := chi.NewRouter()
+	router := http.NewServeMux()
+	router.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Println("Root")
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("Root"))
+	}))
+	router.Handle("/api/", routes.APIRouter())
 
-	router.Use(middlewares.CORSMiddleware)
-	router.Use(middlewares.Logger)
-
-	router.Mount("/api", routes.APIRouter)
-	router.Mount("/actions", routes.ActionRouter)
-	router.Mount("/", routes.PageRouter)
-
-	srv := &http.Server{
+	fmt.Println("Starting server on port", port)
+	server := &http.Server{
 		Handler: router,
 		Addr:    ":" + port,
 	}
+	log.Fatal(server.ListenAndServe())
 
-	log.Println("Starting server on port", port)
-	log.Fatal(srv.ListenAndServe())
+}
+
+func APIMux() http.Handler {
+	router := http.NewServeMux()
+	router.Handle("/v1", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Println("V1")
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("V1"))
+	}))
+	return http.StripPrefix("/bbb", router)
 }
