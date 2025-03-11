@@ -16,7 +16,11 @@ import (
 
 func UserRouter() http.Handler {
 	router := http.NewServeMux()
-	router.HandleFunc("/", routeHandlers.RegisterUser)
-	router.HandleFunc("/login", routeHandlers.LoginUser)
+	router.HandleFunc("/test", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("user test router"))
+	})
+	router.HandleFunc("POST /register", routeHandlers.RegisterUser)
+	router.HandleFunc("POST /login", routeHandlers.LoginUser)
 	return http.StripPrefix("/users", router)
 }

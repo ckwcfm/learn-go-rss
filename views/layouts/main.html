@@ -13,9 +13,9 @@
     />
   </head>
   <body class="relative bg-gray-100">
-    <div class="flex h-screen w-screen mx-auto">
+    <div id="main" class="flex h-screen w-screen mx-auto">
       {{ block "sidebar" . }}{{ end }}
-      <div class="flex-1 bg-white h-screen w-full" id="main" hx-history-elt>
+      <div class="flex-1 bg-white h-screen w-full" id="content" hx-history-elt>
         {{ block "content" . }}{{ end }}
       </div>
     </div>

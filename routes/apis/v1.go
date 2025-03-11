@@ -14,6 +14,6 @@ func V1Router() http.Handler {
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("api v1 test"))
 	}))
-	router.Handle("/users", UserRouter())
+	router.Handle("/users/", UserRouter())
 	return http.StripPrefix("/v1", router)
 }

@@ -13,6 +13,7 @@ import (
 
 func Authorization(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Println("Authorization middleware")
 		cookie, err := r.Cookie("Authorization")
 		log.Println(cookie)
 		if err != nil {
@@ -41,6 +42,7 @@ func Unauthorized(next http.Handler) http.Handler {
 			"views/layouts/main.html",
 			"views/pages/unauthorized.html",
 		}
+		w.Header().Add("HX-Retarget", "#main")
 		tmpl := template.Must(template.ParseFiles(tmpls...))
 		tmpl.Execute(w, nil)
 	})

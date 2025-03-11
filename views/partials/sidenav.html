@@ -5,7 +5,7 @@
       <button
         class="text-sm hover:bg-gray-200 hover:text-gray-900 p-1 px-2 rounded-md"
         hx-get="/actions/pages/home"
-        hx-target="#main"
+        hx-target="#content"
         hx-swap="innerHTML"
         hx-push-url="/"
       >
@@ -14,9 +14,10 @@
       <button
         class="text-sm hover:bg-gray-200 hover:text-gray-900 p-1 px-2 rounded-md"
         hx-get="/actions/pages/about"
-        hx-target="#main"
+        hx-target="#content"
         hx-swap="innerHTML"
         hx-push-url="/about"
+        hx-redirect="/login"
       >
         About
       </button>
