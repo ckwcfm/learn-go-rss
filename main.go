@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/ckwcfm/learn-go/rss/db"
+	"github.com/ckwcfm/learn-go/rss/middlewares"
 	"github.com/ckwcfm/learn-go/rss/routes"
 )
 
@@ -30,28 +31,19 @@ func main() {
 	}
 
 	router := http.NewServeMux()
-	router.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Println("Root")
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("Root"))
-	}))
+	router.Handle("/", routes.PageRouter())
+	router.Handle("/actions/", routes.ActionRouter())
 	router.Handle("/api/", routes.APIRouter())
 
 	fmt.Println("Starting server on port", port)
+	chain := middlewares.Chain(
+		middlewares.Logger,
+		middlewares.CORSMiddleware,
+	)
 	server := &http.Server{
-		Handler: router,
+		Handler: chain(router),
 		Addr:    ":" + port,
 	}
 	log.Fatal(server.ListenAndServe())
 
-}
-
-func APIMux() http.Handler {
-	router := http.NewServeMux()
-	router.Handle("/v1", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Println("V1")
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("V1"))
-	}))
-	return http.StripPrefix("/bbb", router)
 }

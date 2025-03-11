@@ -3,15 +3,17 @@ package routes
 import (
 	"log"
 	"net/http"
+
+	"github.com/ckwcfm/learn-go/rss/routes/apis"
 )
 
 func APIRouter() http.Handler {
 	router := http.NewServeMux()
-	router.HandleFunc("/v1", func(w http.ResponseWriter, r *http.Request) {
-		log.Println("V1 bbb")
+	log.Println("api router")
+	router.Handle("/v1", apis.V1Router())
+	router.Handle("/test", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("V1 bbb"))
-	})
-
+		w.Write([]byte("test"))
+	}))
 	return http.StripPrefix("/api", router)
 }
