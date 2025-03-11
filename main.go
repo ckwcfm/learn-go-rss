@@ -10,8 +10,6 @@ import (
 	"github.com/ckwcfm/learn-go/rss/db"
 	"github.com/ckwcfm/learn-go/rss/middlewares"
 	"github.com/ckwcfm/learn-go/rss/routes"
-
-	"github.com/go-chi/chi"
 )
 
 func main() {
@@ -32,20 +30,20 @@ func main() {
 		log.Fatal(err)
 	}
 
-	router := chi.NewRouter()
+	router := http.NewServeMux()
+	router.Handle("/", routes.PageRouter())
+	router.Handle("/actions/", routes.ActionRouter())
+	router.Handle("/api/", routes.APIRouter())
 
-	router.Use(middlewares.CORSMiddleware)
-	router.Use(middlewares.Logger)
-
-	router.Mount("/api", routes.APIRouter)
-	router.Mount("/actions", routes.ActionRouter)
-	router.Mount("/", routes.PageRouter)
-
-	srv := &http.Server{
-		Handler: router,
+	fmt.Println("Starting server on port", port)
+	chain := middlewares.Chain(
+		middlewares.Logger,
+		middlewares.CORSMiddleware,
+	)
+	server := &http.Server{
+		Handler: chain(router),
 		Addr:    ":" + port,
 	}
+	log.Fatal(server.ListenAndServe())
 
-	log.Println("Starting server on port", port)
-	log.Fatal(srv.ListenAndServe())
 }

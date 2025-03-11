@@ -22,6 +22,7 @@ func Home(w http.ResponseWriter, r *http.Request) {
 }
 
 func About(w http.ResponseWriter, r *http.Request) {
+
 	userID := r.Context().Value(constants.UserIDKey).(string)
 	log.Println(userID)
 	tmpls := []string{

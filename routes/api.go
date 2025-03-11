@@ -1,13 +1,20 @@
 package routes
 
 import (
-	"github.com/ckwcfm/learn-go/rss/routes/apis"
+	"log"
+	"net/http"
 
-	"github.com/go-chi/chi"
+	"github.com/ckwcfm/learn-go/rss/routes/apis"
 )
 
-var APIRouter = chi.NewRouter()
+func APIRouter() http.Handler {
+	router := http.NewServeMux()
+	log.Println("api router")
+	router.Handle("/v1/", apis.V1Router())
 
-func init() {
-	APIRouter.Mount("/v1", apis.V1Router)
+	router.Handle("/test", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("api test"))
+	}))
+	return http.StripPrefix("/api", router)
 }

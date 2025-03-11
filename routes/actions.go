@@ -1,15 +1,17 @@
 package routes
 
 import (
+	"net/http"
+
+	"github.com/ckwcfm/learn-go/rss/middlewares"
 	"github.com/ckwcfm/learn-go/rss/routes/actions/dialogs"
 	"github.com/ckwcfm/learn-go/rss/routes/actions/pages"
-	"github.com/go-chi/chi"
 )
 
-var ActionRouter = chi.NewRouter()
-
-func init() {
-	ActionRouter.Get("/pages/home", pages.HomePage)
-	ActionRouter.Get("/pages/about", pages.AboutPage)
-	ActionRouter.HandleFunc("/dialogs/homeDialog", dialogs.ActionHomeDialog)
+func ActionRouter() http.Handler {
+	router := http.NewServeMux()
+	router.HandleFunc("/pages/home", pages.HomePage)
+	router.Handle("/pages/about", middlewares.Authorization(http.HandlerFunc(pages.AboutPage)))
+	router.HandleFunc("/dialogs/homeDialog", dialogs.ActionHomeDialog)
+	return http.StripPrefix("/actions", router)
 }
