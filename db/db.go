@@ -55,6 +55,7 @@ func ConnectToMongo(ctx context.Context) error {
 	mongoClient = client
 
 	createIndexes(ctx)
+
 	return nil
 }
 
