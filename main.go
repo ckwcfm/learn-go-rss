@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/ckwcfm/learn-go/rss/db"
+	"github.com/ckwcfm/learn-go/rss/env"
 	"github.com/ckwcfm/learn-go/rss/middlewares"
 	"github.com/ckwcfm/learn-go/rss/routes"
 )
@@ -20,7 +21,7 @@ func main() {
 		}
 	}()
 
-	loadEnv()
+	env.LoadEnv()
 
 	port := os.Getenv("PORT")
 	fmt.Println(port)

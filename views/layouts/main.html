@@ -4,7 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>RSS Feed</title>
-    <script defer src="https://unpkg.com/htmx.org@2.0.4"></script>
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    <script src="https://unpkg.com/htmx-ext-response-targets@2.0.2"></script>
+    <script src="https://unpkg.com/htmx-ext-multi-swap@2.0.0/multi-swap.js"></script>
+    <script src="https://unpkg.com/htmx-ext-preload@2.1.0"></script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <link
@@ -12,7 +16,7 @@
       rel="stylesheet"
     />
   </head>
-  <body class="relative bg-gray-100">
+  <body hx-ext="response-targets,multi-swap" class="relative bg-gray-100">
     <div id="main" class="flex h-screen w-screen mx-auto">
       {{ block "sidebar" . }}{{ end }}
       <div class="flex-1 bg-white h-screen w-full" id="content" hx-history-elt>
@@ -23,5 +27,19 @@
     {{ block "dialog" . }}
       <div id="dialog" />
     {{ end }}
+
+
+    <script>
+      $(document).ready(function () {
+        console.log("ready");
+        $(document.body).on("htmx:beforeSwap", function (event) {
+          console.log("beforeSwap");
+          if (event.detail.xhr.status === 422) {
+            event.detail.shouldSwap = true;
+            event.detail.isError = false;
+          }
+        });
+      });
+    </script>
   </body>
 </html>

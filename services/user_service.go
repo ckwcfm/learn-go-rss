@@ -61,7 +61,7 @@ func ValidateUser(email, password string) (models.User, error) {
 	return user, nil
 }
 
-func CreateToken(userID string) (string, error) {
+func CreateToken(userID primitive.ObjectID) (string, error) {
 	jwtSecret := os.Getenv("JWT_SECRET")
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_id": userID,
@@ -102,15 +102,11 @@ func Login(email, password string) (string, error) {
 	return token, nil
 }
 
-func GetUserByID(userID string) (models.User, error) {
+func GetUserByID(userID primitive.ObjectID) (models.User, error) {
 	log.Println("Getting user by ID", userID)
 	var user models.User
-	objectID, err := primitive.ObjectIDFromHex(userID)
-	if err != nil {
-		return models.User{}, err
-	}
 	opts := options.FindOne().SetProjection(bson.M{"password": 0})
-	err = getUserCollection().FindOne(context.Background(), bson.M{"_id": objectID}, opts).Decode(&user)
+	err := getUserCollection().FindOne(context.Background(), bson.M{"_id": userID}, opts).Decode(&user)
 	log.Println("User", user)
 	return user, err
 }

@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "browser-sync": "^3.0.3",
     "prettier": "^3.5.3",
     "prettier-plugin-go-template": "^0.0.15"
   }

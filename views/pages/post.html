@@ -1,0 +1,78 @@
+{{ define "content" }}
+  <div class="container mx-auto p-4 flex flex-col gap-4">
+    <div class="container mx-auto">
+      <h1 class="text-2xl font-bold">Post Form</h1>
+      {{ block "post-form" . }}
+      {{ end }}
+    </div>
+
+    <div class="border-b border-gray-300 w-full"></div>
+    {{ block "post-list" . }}
+    {{ end }}
+  </div>
+{{ end }}
+
+{{ define "post-form" }}
+  <form
+    class="flex flex-col gap-4 p-2 bg-slate-100 rounded-md"
+    hx-post="/actions/posts"
+    hx-swap="outerHTML"
+  >
+    <div class="flex flex-col gap-2">
+      <label for="title">Title</label>
+      <input
+        type="text"
+        class="border-2 border-gray-300 rounded-md p-2"
+        name="title"
+        placeholder="Title"
+        value="{{ .Form.Title }}"
+      />
+    </div>
+    <div class="flex flex-col gap-2">
+      <label for="content">Content</label>
+      <input
+        type="text"
+        class="border-2 border-gray-300 rounded-md p-2"
+        name="content"
+        placeholder="Content"
+        value="{{ .Form.Content }}"
+      />
+    </div>
+    {{ block "error" . }}
+    {{ end }}
+    <button type="submit" class="bg-blue-500 text-white p-2 rounded-md">
+      Create Post
+    </button>
+  </form>
+{{ end }}
+
+{{ define "error" }}
+  <div id="error-message" class="text-red-500">
+    {{ .Error }}
+  </div>
+{{ end }}
+
+{{ define "post-list" }}
+  <div class="flex flex-col gap-4">
+    <h1 class="text-2xl font-bold">Posts</h1>
+    <div id="post-list" hx-swap="beforeend">
+      {{ range .Posts }}
+        {{ template "post-item" . }}
+      {{ end }}
+    </div>
+  </div>
+{{ end }}
+
+{{ define "oob-post-item" }}
+  <div id="post-list" hx-swap-oob="afterbegin">
+    {{ block "post-item" . }}
+    {{ end }}
+  </div>
+{{ end }}
+
+{{ define "post-item" }}
+  <div class="flex flex-col even:bg-slate-100 odd:bg-slate-50 p-2">
+    <h2 class="text-lg font-bold">{{ .Title }}</h2>
+    <p class="text-sm">{{ .Content }}</p>
+  </div>
+{{ end }}

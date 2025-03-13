@@ -23,6 +23,8 @@ type CollectionName string
 
 const (
 	UserCollection CollectionName = "users"
+	PostCollection CollectionName = "posts"
+	BookCollection CollectionName = "books"
 )
 const database = "rss"
 
@@ -86,6 +88,7 @@ func createIndexes(ctx context.Context) {
 	go func() {
 		defer wg.Done()
 		createUserIndex(ctx)
+		createPostIndex(ctx)
 	}()
 
 	wg.Wait()
@@ -103,6 +106,22 @@ func createUserIndex(ctx context.Context) {
 	})
 
 	userCollection.Indexes().CreateOne(ctx, mongo.IndexModel{
-		Keys: bson.M{"created_at": 1},
+		Keys: bson.M{"createdAt": 1},
+	})
+}
+
+func createPostIndex(ctx context.Context) {
+	postCollection, err := GetCollection(PostCollection)
+	if err != nil {
+		log.Fatal("Failed to connect to MongoDB", err)
+	}
+	postCollection.Indexes().CreateOne(ctx, mongo.IndexModel{
+		Keys: bson.M{"createdAt": 1},
+	})
+	postCollection.Indexes().CreateOne(ctx, mongo.IndexModel{
+		Keys: bson.M{"updatedAt": 1},
+	})
+	postCollection.Indexes().CreateOne(ctx, mongo.IndexModel{
+		Keys: bson.M{"userId": 1},
 	})
 }
