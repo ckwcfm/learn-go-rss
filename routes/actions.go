@@ -15,6 +15,7 @@ func ActionRouter() http.Handler {
 	router.Handle("/pages/", middlewares.IsUser(protectedPageRoutes()))
 	router.Handle("POST /posts", middlewares.IsUser(http.HandlerFunc(actions.CreatePost)))
 	router.Handle("POST /books", middlewares.IsUser(http.HandlerFunc(actions.CreateBook)))
+	router.Handle("GET /books", middlewares.IsUser(http.HandlerFunc(actions.GetBooks)))
 	router.HandleFunc("/dialogs/homeDialog", dialogs.ActionHomeDialog)
 	return http.StripPrefix("/actions", router)
 }

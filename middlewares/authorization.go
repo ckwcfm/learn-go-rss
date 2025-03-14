@@ -9,6 +9,7 @@ import (
 
 	"github.com/ckwcfm/learn-go/rss/constants"
 	"github.com/ckwcfm/learn-go/rss/services"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func Authorization(next http.Handler) http.Handler {
@@ -31,7 +32,12 @@ func Authorization(next http.Handler) http.Handler {
 			Unauthorized(next).ServeHTTP(w, r)
 			return
 		}
-		ctx := context.WithValue(r.Context(), constants.UserIDKey, userID)
+		id, err := primitive.ObjectIDFromHex(userID)
+		if err != nil {
+			Unauthorized(next).ServeHTTP(w, r)
+			return
+		}
+		ctx := context.WithValue(r.Context(), constants.UserIDKey, id)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }

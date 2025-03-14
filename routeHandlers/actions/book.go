@@ -8,17 +8,13 @@ import (
 	"github.com/ckwcfm/learn-go/rss/models"
 	"github.com/ckwcfm/learn-go/rss/services"
 	"github.com/ckwcfm/learn-go/rss/templates/views/contents"
+	"github.com/ckwcfm/learn-go/rss/utils"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func CreateBook(w http.ResponseWriter, r *http.Request) {
 	log.Println("CreateBook")
-	userId := r.Context().Value(constants.UserIDKey).(string)
-	userID, err := primitive.ObjectIDFromHex(userId)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+	userID := r.Context().Value(constants.UserIDKey).(primitive.ObjectID)
 	title := r.FormValue("title")
 	author := r.FormValue("author")
 	if title == "" || author == "" {
@@ -46,4 +42,18 @@ func CreateBook(w http.ResponseWriter, r *http.Request) {
 	bookListItem := contents.Book.OobListItem(newBook)
 	bookForm.Render(w, r)
 	bookListItem.Render(w, r)
+}
+
+func GetBooks(w http.ResponseWriter, r *http.Request) {
+	log.Println("GetBooks")
+	userID := r.Context().Value(constants.UserIDKey).(primitive.ObjectID)
+	page := utils.GetQueryWithDefault(r, "page", 1)
+	limit := utils.GetQueryWithDefault(r, "limit", 10)
+	bookListData, err := services.GetBookListData(userID, page, limit)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	bookList := contents.Book.List(bookListData)
+	bookList.Render(w, r)
 }

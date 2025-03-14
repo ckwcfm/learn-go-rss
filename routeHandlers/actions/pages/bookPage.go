@@ -6,18 +6,16 @@ import (
 	"github.com/ckwcfm/learn-go/rss/constants"
 	"github.com/ckwcfm/learn-go/rss/services"
 	"github.com/ckwcfm/learn-go/rss/templates/views/contents"
+	"github.com/ckwcfm/learn-go/rss/utils"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func BookPage(w http.ResponseWriter, r *http.Request) {
-	userId := r.Context().Value(constants.UserIDKey).(string)
-	userID, err := primitive.ObjectIDFromHex(userId)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	books, err := services.GetBooksForUser(userID)
+	userID := r.Context().Value(constants.UserIDKey).(primitive.ObjectID)
+	// Get page number from query params, default to 1 if not provided
+	page := utils.GetQueryWithDefault(r, "page", 1)
+	limit := 10
+	bookListData, err := services.GetBookListData(userID, page, limit)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -28,9 +26,7 @@ func BookPage(w http.ResponseWriter, r *http.Request) {
 			Author: "Book Author",
 			Error:  "",
 		},
-		BookListData: contents.BookListData{
-			Books: books,
-		},
+		BookListData: bookListData,
 	})
 
 	content.Render(w, r)

@@ -11,12 +11,7 @@ import (
 
 func IsUser(next http.Handler) http.Handler {
 	return Authorization(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		id := r.Context().Value(constants.UserIDKey).(string)
-		userID, err := primitive.ObjectIDFromHex(id)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusUnauthorized)
-			return
-		}
+		userID := r.Context().Value(constants.UserIDKey).(primitive.ObjectID)
 		user, err := services.GetUserByID(userID)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusUnauthorized)

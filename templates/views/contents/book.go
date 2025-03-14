@@ -33,7 +33,13 @@ type BookFormData struct {
 }
 
 type BookListData struct {
-	Books []models.Book
+	Books       []models.Book
+	CurrentPage int
+	TotalPages  int
+	NextPage    int
+	PrevPage    int
+	HasNext     bool
+	HasPrev     bool
 }
 
 type OobBookListItemData = models.Book

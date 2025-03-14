@@ -8,8 +8,11 @@ import (
 
 	"github.com/ckwcfm/learn-go/rss/db"
 	"github.com/ckwcfm/learn-go/rss/models"
+	"github.com/ckwcfm/learn-go/rss/templates/views/contents"
+	"github.com/ckwcfm/learn-go/rss/utils"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -36,9 +39,11 @@ func CreateBook(book models.Book) (models.Book, error) {
 	return book, nil
 }
 
-func GetBooksForUser(userID primitive.ObjectID) ([]models.Book, error) {
+func GetBooksForUser(userID primitive.ObjectID, page int, limit int) ([]models.Book, error) {
+
 	bookCollection := getBookCollection()
-	cursor, err := bookCollection.Find(context.Background(), bson.M{"userId": userID})
+	options := utils.NewMongoPagination(limit, page).GetPaginationOptions()
+	cursor, err := bookCollection.Find(context.Background(), bson.M{"userId": userID}, options)
 	if err != nil {
 		return nil, err
 	}
@@ -47,4 +52,45 @@ func GetBooksForUser(userID primitive.ObjectID) ([]models.Book, error) {
 		return nil, err
 	}
 	return books, nil
+}
+
+func GetBookTotalPagesForUser(userID primitive.ObjectID, limit int) (int, error) {
+	total, err := CountBooksForUser(userID)
+	if err != nil {
+		return 0, err
+	}
+	return int(total) / limit, nil
+}
+
+func CountBooksForUser(userID primitive.ObjectID) (int64, error) {
+	bookCollection := getBookCollection()
+	count, err := bookCollection.CountDocuments(context.Background(), bson.M{"userId": userID})
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
+}
+
+func GetBookListData(userID primitive.ObjectID, page int, limit int) (contents.BookListData, error) {
+	books, err := GetBooksForUser(userID, page, limit)
+	if err != nil {
+		return contents.BookListData{}, err
+	}
+	totalPages, err := GetBookTotalPagesForUser(userID, limit)
+	if err != nil {
+		return contents.BookListData{}, err
+	}
+	nextPage := min(page+1, totalPages)
+	prevPage := max(page-1, 1)
+	hasNext := page < totalPages
+	hasPrev := page > 1
+	return contents.BookListData{
+		Books:       books,
+		CurrentPage: page,
+		TotalPages:  totalPages,
+		NextPage:    nextPage,
+		PrevPage:    prevPage,
+		HasNext:     hasNext,
+		HasPrev:     hasPrev,
+	}, nil
 }
