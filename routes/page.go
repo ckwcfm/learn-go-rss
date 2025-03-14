@@ -10,6 +10,10 @@ import (
 
 func PageRouter() http.Handler {
 	router := http.NewServeMux()
+
+	fs := http.FileServer(http.Dir("./public"))
+	router.Handle("/public/", http.StripPrefix("/public", fs))
+
 	router.HandleFunc("/", pages.Home)
 	router.Handle("GET /about", middlewares.IsUser(http.HandlerFunc(pages.About)))
 	router.Handle("GET /posts", middlewares.IsUser(http.HandlerFunc(pages.Post)))

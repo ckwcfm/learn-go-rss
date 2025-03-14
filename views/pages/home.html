@@ -1,15 +1,31 @@
 {{ define "content" }}
-  <div class="w-full h-full flex flex-col items-center justify-center">
-    <h1 class="text-2xl font-bold text-label">Home</h1>
-    <p class="text-lg text-label-secondary">Welcome to the home page</p>
-    <p class="text-lg text-label-secondary">hello Alvin and Alex</p>
-    <button
-      class="bg-blue-500 text-white p-2 rounded-md"
-      hx-get="/actions/dialogs/homeDialog"
-      hx-target="#dialog"
-      hx-swap="outerHTML"
-    >
-      Logout Dialog
-    </button>
+  <div
+    class="w-full h-full flex flex-col p-4 gap-4 items-center justify-center"
+  >
+    <div class="flex flex-col gap-2">
+      <h1 class="text-2xl font-bold text-label">Home</h1>
+      <p class="text-lg text-label-secondary">Welcome to the home page</p>
+      <p class="text-lg text-label-secondary">hello Alvin and Alex</p>
+      <button
+        class="bg-blue-500 text-white p-2 rounded-md"
+        hx-get="/actions/dialogs/homeDialog"
+        hx-target="#dialog"
+        hx-swap="outerHTML"
+      >
+        Logout Dialog
+      </button>
+    </div>
+
+    <div class="flex flex-col gap-2 bg-slate-100 p-4 rounded-md">
+      <div>This is a demonstration of a Alert using HTMX OOB</div>
+      <button
+        class="bg-blue-500 text-white p-2 rounded-md"
+        hx-get="/actions/alerts/homeAlert"
+        hx-target="#alert"
+        hx-swap="outerHTML"
+      >
+        Show Alert
+      </button>
+    </div>
   </div>
 {{ end }}

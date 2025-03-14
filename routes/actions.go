@@ -5,6 +5,7 @@ import (
 
 	"github.com/ckwcfm/learn-go/rss/middlewares"
 	"github.com/ckwcfm/learn-go/rss/routeHandlers/actions"
+	"github.com/ckwcfm/learn-go/rss/routeHandlers/actions/alerts"
 	"github.com/ckwcfm/learn-go/rss/routeHandlers/actions/dialogs"
 	"github.com/ckwcfm/learn-go/rss/routeHandlers/actions/pages"
 )
@@ -17,6 +18,7 @@ func ActionRouter() http.Handler {
 	router.Handle("POST /books", middlewares.IsUser(http.HandlerFunc(actions.CreateBook)))
 	router.Handle("GET /books", middlewares.IsUser(http.HandlerFunc(actions.GetBooks)))
 	router.HandleFunc("/dialogs/homeDialog", dialogs.ActionHomeDialog)
+	router.HandleFunc("/alerts/homeAlert", alerts.ActionHomeAlert)
 	return http.StripPrefix("/actions", router)
 }
 

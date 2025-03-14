@@ -3,6 +3,7 @@ package actions
 import (
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/ckwcfm/learn-go/rss/constants"
 	"github.com/ckwcfm/learn-go/rss/models"
@@ -55,5 +56,6 @@ func GetBooks(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	bookList := contents.Book.List(bookListData)
+	time.Sleep(1 * time.Second)
 	bookList.Render(w, r)
 }
